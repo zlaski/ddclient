@@ -1,0 +1,9 @@
+# /etc/ddclient.conf for akisystems.com
+protocol=zoneedit1
+daemon=666
+            
+zone=akisystems.com \
+use=web, web=http://dynamic.zoneedit.com/checkip.html \
+login=zlaski, password='8F11B2E318331836' \
+mail-failure=zlaski@ziemas.net \
+akisystems.com,*.akisystems.com,*.hcsv.akisystems.com,hcsv.akisystems.com

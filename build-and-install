@@ -1,14 +1,27 @@
 #!/bin/bash
 
-git fetch upstream
-./autogen
-./configure --prefix=/usr --bindir=/usr/sbin --sbindir=/usr/sbin --sysconfdir=/etc --localstatedir=/var
-make
-make VERBOSE=1 check
-sudo make install
+live_or_die() {
+    local CMD=$*
+    echo -e "\033[1;42m============== Executing: $CMD\033[0m" >&2
+    $CMD
+    local RES=$?
+    if [ $RES -ne 0 ]; then
+        echo -e "\033[1;41m============== Failed: $RES\033[0m" >&2
+        echo ============== Failed: $RES >&2
+        exit
+    fi
+}
 
-sudo systemctl stop ddclient.service
-sudo systemctl enable ddclient.service
-sudo systemctl start ddclient.service
-sudo systemctl status ddclient.service
+# git fetch upstream
+live_or_die ./autogen
+live_or_die ./configure --prefix=/usr --bindir=/usr/sbin --sbindir=/usr/sbin --sysconfdir=/etc --localstatedir=/var
+live_or_die make
+live_or_die make VERBOSE=1 check
 
+live_or_die sudo systemctl stop ddclient.service
+live_or_die sudo make install
+live_or_die sudo cp ddclient.conf.local /etc/ddclient.conf
+
+live_or_die sudo systemctl enable ddclient.service
+live_or_die sudo systemctl start ddclient.service
+live_or_die sudo systemctl --no-pager status ddclient.service
