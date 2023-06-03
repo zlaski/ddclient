@@ -1,0 +1,14 @@
+#!/bin/bash
+
+git fetch upstream
+./autogen
+./configure --prefix=/usr --bindir=/usr/sbin --sbindir=/usr/sbin --sysconfdir=/etc --localstatedir=/var
+make
+make VERBOSE=1 check
+sudo make install
+
+sudo systemctl stop ddclient.service
+sudo systemctl enable ddclient.service
+sudo systemctl start ddclient.service
+sudo systemctl status ddclient.service
+

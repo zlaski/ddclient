@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo /usr/sbin/ddclient -foreground -verbose -debug -force
